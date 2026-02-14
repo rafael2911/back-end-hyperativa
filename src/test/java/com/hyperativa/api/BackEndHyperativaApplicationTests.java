@@ -1,4 +1,4 @@
-package com.hyperativa.back_end;
+package com.hyperativa.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
