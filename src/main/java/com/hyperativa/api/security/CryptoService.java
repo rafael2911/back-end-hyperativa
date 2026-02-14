@@ -1,5 +1,7 @@
 package com.hyperativa.api.security;
 
+import com.hyperativa.api.exception.DecryptException;
+import com.hyperativa.api.exception.EncryptException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,7 @@ public class CryptoService {
 
     private static final String ALGORITHM = "AES";
 
-    @Value("${app.crypto.secret-key:hyperativa-secret-key-for-encryption}")
+    @Value("${app.crypto.secret-key}")
     private String secretKey;
 
     private SecretKeySpec getKey() throws Exception {
@@ -36,7 +38,7 @@ public class CryptoService {
             return Base64.getEncoder().encodeToString(encryptedValue);
         } catch (Exception e) {
             log.error("Error encrypting value", e);
-            throw new RuntimeException("Error encrypting value", e);
+            throw new EncryptException("Error encrypting value");
         }
     }
 
@@ -49,7 +51,7 @@ public class CryptoService {
             return new String(decryptedValue, StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.error("Error decrypting value", e);
-            throw new RuntimeException("Error decrypting value", e);
+            throw new DecryptException("Error decrypting value");
         }
     }
 }

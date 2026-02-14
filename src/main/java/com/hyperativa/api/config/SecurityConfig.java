@@ -60,8 +60,6 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/h2-console").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/auth/register", "/v1/auth/token").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/auth/health").permitAll()
                         .requestMatchers("/v1/cards/**").authenticated()

@@ -148,7 +148,7 @@ public class CardService {
 
     private boolean cardValidate(CardEntity cardEntity) {
         return cardEntityRepository.existsByCardIdentifier(cardEntity.getCardIdentifier())
-                && cardEntityRepository.existsByCardNumberEncrypted(cardEntity.getCardNumberEncrypted());
+                || cardEntityRepository.existsByCardNumberEncrypted(cardEntity.getCardNumberEncrypted());
     }
 
     public CardResponseDTO getCard(Long cardId, String username) {
@@ -165,7 +165,7 @@ public class CardService {
         return cardEntityMapper.toCardResponseDTO(cardEntity);
     }
 
-    public CardResponseDTO searchCardByLastDigits(String cardNumber, String username) {
+    public CardResponseDTO searchCardByCardNumber(String cardNumber, String username) {
         UserEntity userEntity = userEntityRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_WITH_USERNAME_ERROR_MESSAGE.formatted(username)));
         String encrypt = cryptoService.encrypt(cardNumber);

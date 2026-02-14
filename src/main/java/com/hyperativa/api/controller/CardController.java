@@ -91,7 +91,7 @@ public class CardController {
         log.info("Search card endpoint called by user: {} with last digits: {} - IP: {}",
                 username, lastDigits, getClientIp(httpRequest));
 
-        CardResponseDTO response = cardService.searchCardByLastDigits(cardNumber, username);
+        CardResponseDTO response = cardService.searchCardByCardNumber(cardNumber, username);
 
         log.info("Card found for user: {} with last digits: {} response: {}", username, lastDigits, response);
         return ResponseEntity.ok(response);
