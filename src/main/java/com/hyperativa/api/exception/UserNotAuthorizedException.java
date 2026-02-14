@@ -1,8 +1,10 @@
 package com.hyperativa.api.exception;
 
-public class UserNotAuthorizedException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class UserNotAuthorizedException extends ApiException {
     public UserNotAuthorizedException(String message) {
-        super(message);
+        super(message, HttpStatus.FORBIDDEN);
     }
 }
 
