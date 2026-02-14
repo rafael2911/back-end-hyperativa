@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: card-api
+
+  datasource:
+    url: jdbc:mysql://${MYSQL_DB_HOST:localhost}:${MYSQL_DB_PORT:3306}/${MYSQL_DB_NAME:hyperativa_db}
+    username: ${MYSQL_DB_USER_NAME:hyperativa}
+    password: ${MYSQL_DB_USER_PASSWORD:hyperativa123}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+
+app:
+  jwt:
+    secret-key: ${JWT_SECRET:hyperativa-super-secret-key-for-jwt-token-generation-please-change-in-production}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
+  crypto:
+    secret-key: ${CRYPTO_SECRET:hyperativa-secret-key-for-encryption}
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    root: INFO
+    com.hyperativa.back_end: DEBUG
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/cardapi.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10
