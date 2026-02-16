@@ -4,12 +4,13 @@ import com.hyperativa.api.dto.BatchUploadResponseDTO;
 import com.hyperativa.api.dto.CardRequestDTO;
 import com.hyperativa.api.dto.CardResponseDTO;
 import com.hyperativa.api.service.CardService;
-import com.hyperativa.api.util.CardNumberUtils;
 import com.hyperativa.api.service.FileParserService;
+import com.hyperativa.api.util.CardNumberUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +46,12 @@ public class CardController {
         return ResponseEntity.created(uri).body(response);
     }
 
-    @PostMapping("/batch")
+    @PostMapping(
+            value = "/batch",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<BatchUploadResponseDTO> uploadCardBatch(
-            @RequestHeader MultipartFile file,
+            @RequestPart MultipartFile file,
             Authentication authentication,
             HttpServletRequest httpRequest) {
 

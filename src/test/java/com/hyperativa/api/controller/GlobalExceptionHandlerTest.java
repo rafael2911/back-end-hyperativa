@@ -156,4 +156,3 @@ class GlobalExceptionHandlerTest {
         assertEquals("An unexpected error occurred", resp.getBody().getMessage());
     }
 }
-

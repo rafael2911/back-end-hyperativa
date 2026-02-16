@@ -3,9 +3,7 @@ package com.hyperativa.api.controller;
 import com.hyperativa.api.dto.AuthRequestDTO;
 import com.hyperativa.api.entity.UserEntity;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
