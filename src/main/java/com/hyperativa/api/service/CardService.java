@@ -1,6 +1,5 @@
 package com.hyperativa.api.service;
 
-import com.hyperativa.api.dto.BatchUploadRequestDTO;
 import com.hyperativa.api.dto.BatchUploadResponseDTO;
 import com.hyperativa.api.dto.CardRequestDTO;
 import com.hyperativa.api.dto.CardResponseDTO;
@@ -13,11 +12,11 @@ import com.hyperativa.api.repository.CardBatchEntityRepository;
 import com.hyperativa.api.repository.CardEntityRepository;
 import com.hyperativa.api.repository.UserEntityRepository;
 import com.hyperativa.api.security.CryptoService;
-import com.hyperativa.api.util.FileParserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -60,10 +59,10 @@ public class CardService {
     }
 
     @Transactional
-    public BatchUploadResponseDTO createCardsFromBatch(BatchUploadRequestDTO request, String username) {
-        log.info("Processing batch of request {} cards for user: {}", request, username);
+    public BatchUploadResponseDTO createCardsFromBatch(MultipartFile file, String username) {
+        log.info("Processing batch of request {} cards for user: {}", file, username);
         try {
-            String fileContent = new String(request.getFile().getBytes());
+            String fileContent = new String(file.getBytes());
             List<CardRequestDTO> cards = fileParserService.parseCardFile(fileContent);
 
             if (cards.isEmpty()) {
@@ -91,6 +90,8 @@ public class CardService {
             cardBatchEntityRepository.save(batch);
 
             int successCount = 0;
+
+            List<CardEntity> all = cardEntityRepository.findAll();
 
             for (CardRequestDTO cardRequest : cards) {
                 successCount = createCard(loteNumber, cardRequest, userEntity, successCount);
@@ -147,8 +148,9 @@ public class CardService {
     }
 
     private boolean cardValidate(CardEntity cardEntity) {
-        return cardEntityRepository.existsByCardIdentifier(cardEntity.getCardIdentifier())
-                || cardEntityRepository.existsByCardNumberEncrypted(cardEntity.getCardNumberEncrypted());
+        final boolean identifierExists = cardEntityRepository.existsByCardIdentifier(cardEntity.getCardIdentifier());
+        final boolean cardNumberEncryptedExists = cardEntityRepository.existsByCardNumberEncrypted(cardEntity.getCardNumberEncrypted());
+        return identifierExists || cardNumberEncryptedExists;
     }
 
     public CardResponseDTO getCard(Long cardId, String username) {

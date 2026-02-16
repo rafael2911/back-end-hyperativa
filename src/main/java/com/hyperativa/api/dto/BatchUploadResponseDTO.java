@@ -12,18 +12,18 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BatchUploadResponseDTO {
 
-    @JsonProperty("lote_number")
+    @JsonProperty("loteNumber")
     private String loteNumber;
 
-    @JsonProperty("total_cards")
+    @JsonProperty("totalCards")
     private Integer totalCards;
 
-    @JsonProperty("processed_cards")
+    @JsonProperty("processedCards")
     private Integer processedCards;
 
     private String status;
 
-    @JsonProperty("error_message")
+    @JsonProperty("errorMessage")
     private String errorMessage;
 }
 

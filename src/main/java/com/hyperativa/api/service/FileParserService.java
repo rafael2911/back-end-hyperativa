@@ -1,4 +1,4 @@
-package com.hyperativa.api.util;
+package com.hyperativa.api.service;
 
 import com.hyperativa.api.dto.CardRequestDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +63,8 @@ public class FileParserService {
         }
 
         try {
-            // [01-01] Card identifier (C1, C2, etc.)
-            String cardIdentifier = line.substring(0, Math.min(2, line.length())).trim();
+            // [01-07] Card identifier (C1, C2, etc.)
+            String cardIdentifier = line.substring(0, Math.min(7, line.length())).trim();
             if (cardIdentifier.isEmpty()) {
                 return null;
             }

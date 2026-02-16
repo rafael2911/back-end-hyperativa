@@ -1,12 +1,11 @@
 package com.hyperativa.api.controller;
 
-import com.hyperativa.api.dto.BatchUploadRequestDTO;
 import com.hyperativa.api.dto.BatchUploadResponseDTO;
 import com.hyperativa.api.dto.CardRequestDTO;
 import com.hyperativa.api.dto.CardResponseDTO;
 import com.hyperativa.api.service.CardService;
 import com.hyperativa.api.util.CardNumberUtils;
-import com.hyperativa.api.util.FileParserService;
+import com.hyperativa.api.service.FileParserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -14,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -47,15 +47,15 @@ public class CardController {
 
     @PostMapping("/batch")
     public ResponseEntity<BatchUploadResponseDTO> uploadCardBatch(
-            @Valid @ModelAttribute BatchUploadRequestDTO request,
+            @RequestHeader MultipartFile file,
             Authentication authentication,
             HttpServletRequest httpRequest) {
 
         String username = authentication.getName();
         log.info("Batch upload endpoint called by user: {} - File: {} - IP: {}",
-                username, request.getFile().getOriginalFilename(), getClientIp(httpRequest));
+                username, file.getOriginalFilename(), getClientIp(httpRequest));
 
-        BatchUploadResponseDTO response = cardService.createCardsFromBatch(request, username);
+        BatchUploadResponseDTO response = cardService.createCardsFromBatch(file, username);
 
         log.info("Batch uploaded successfully by user: {} - response: {}", username, response);
 

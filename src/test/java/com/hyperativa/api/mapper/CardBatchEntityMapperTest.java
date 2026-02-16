@@ -1,9 +1,8 @@
 package com.hyperativa.api.mapper;
 
-import com.hyperativa.api.dto.BatchUploadRequestDTO;
 import com.hyperativa.api.dto.CardRequestDTO;
 import com.hyperativa.api.entity.CardBatchEntity;
-import com.hyperativa.api.util.FileParserService;
+import com.hyperativa.api.service.FileParserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,9 +49,7 @@ class CardBatchEntityMapperTest {
 
         when(fileParserService.parseCardFile(anyString())).thenReturn(cards);
 
-        BatchUploadRequestDTO request = BatchUploadRequestDTO.builder().file(file).build();
-
-        CardBatchEntity entity = cardBatchEntityMapper.fromBatchUploadRequestDTO(request);
+        CardBatchEntity entity = cardBatchEntityMapper.fromBatchUploadRequestDTO(file);
 
         assertNotNull(entity);
         assertEquals("LOTE001", entity.getLoteNumber());
@@ -81,9 +78,7 @@ class CardBatchEntityMapperTest {
 
         when(fileParserService.parseCardFile(anyString())).thenReturn(cards);
 
-        BatchUploadRequestDTO request = BatchUploadRequestDTO.builder().file(file).build();
-
-        CardBatchEntity entity = cardBatchEntityMapper.fromBatchUploadRequestDTO(request);
+        CardBatchEntity entity = cardBatchEntityMapper.fromBatchUploadRequestDTO(file);
 
         assertNotNull(entity);
         assertEquals("LOTE002", entity.getLoteNumber());
@@ -106,9 +101,7 @@ class CardBatchEntityMapperTest {
 
         when(fileParserService.parseCardFile("batch data")).thenReturn(cards);
 
-        BatchUploadRequestDTO request = BatchUploadRequestDTO.builder().file(file).build();
-
-        CardBatchEntity entity = cardBatchEntityMapper.fromBatchUploadRequestDTO(request);
+        CardBatchEntity entity = cardBatchEntityMapper.fromBatchUploadRequestDTO(file);
 
         assertNotNull(entity);
         assertEquals("BATCH_LOTE_123", entity.getLoteNumber());

@@ -1,6 +1,5 @@
 package com.hyperativa.api.service;
 
-import com.hyperativa.api.dto.BatchUploadRequestDTO;
 import com.hyperativa.api.dto.BatchUploadResponseDTO;
 import com.hyperativa.api.dto.CardRequestDTO;
 import com.hyperativa.api.entity.CardBatchEntity;
@@ -10,7 +9,6 @@ import com.hyperativa.api.mapper.CardEntityMapper;
 import com.hyperativa.api.repository.CardBatchEntityRepository;
 import com.hyperativa.api.repository.CardEntityRepository;
 import com.hyperativa.api.repository.UserEntityRepository;
-import com.hyperativa.api.util.FileParserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,12 +45,11 @@ class CardServiceBatchTest {
     @InjectMocks
     private CardService cardService;
 
-    private BatchUploadRequestDTO request;
+    private MultipartFile file;
 
     @BeforeEach
     void setUp() {
-        MockMultipartFile file = new MockMultipartFile("file", "cards.txt", "text/plain", "dummy".getBytes());
-        request = BatchUploadRequestDTO.builder().file(file).build();
+        file = new MockMultipartFile("file", "cards.txt", "text/plain", "dummy".getBytes());
     }
 
     @Test
@@ -88,7 +86,7 @@ class CardServiceBatchTest {
         when(cardEntityRepository.existsByCardIdentifier(e3.getCardIdentifier())).thenReturn(true);
         when(cardEntityRepository.save(any(CardEntity.class))).thenAnswer(i -> i.getArgument(0));
 
-        BatchUploadResponseDTO resp = cardService.createCardsFromBatch(request, username);
+        BatchUploadResponseDTO resp = cardService.createCardsFromBatch(file, username);
 
         assertNotNull(resp);
         assertEquals("COMPLETED", resp.getStatus());
@@ -119,7 +117,7 @@ class CardServiceBatchTest {
         e1.setCardIdentifier("C1");
         when(cardEntityMapper.fromCardRequestDTO(c1)).thenThrow(RuntimeException.class);
 
-        BatchUploadResponseDTO resp = cardService.createCardsFromBatch(request, username);
+        BatchUploadResponseDTO resp = cardService.createCardsFromBatch(file, username);
 
         assertNotNull(resp);
         assertEquals("COMPLETED", resp.getStatus());
@@ -137,7 +135,7 @@ class CardServiceBatchTest {
 
         when(fileParserService.parseCardFile(anyString())).thenReturn(new LinkedList<>());
 
-        BatchUploadResponseDTO resp = cardService.createCardsFromBatch(request, username);
+        BatchUploadResponseDTO resp = cardService.createCardsFromBatch(file, username);
 
         assertNotNull(resp);
         assertEquals("FAILED", resp.getStatus());
@@ -158,7 +156,7 @@ class CardServiceBatchTest {
         when(userEntityRepository.findByUsername(username)).thenReturn(java.util.Optional.of(user));
         when(cardBatchEntityRepository.existsByLoteNumber("L2")).thenReturn(true);
 
-        BatchUploadResponseDTO resp = cardService.createCardsFromBatch(request, username);
+        BatchUploadResponseDTO resp = cardService.createCardsFromBatch(file, username);
 
         assertNotNull(resp);
         assertEquals("FAILED", resp.getStatus());
