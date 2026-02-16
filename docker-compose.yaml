@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: hyperativa-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hyperativa_db
+      MYSQL_USER: hyperativa
+      MYSQL_PASSWORD: hyperativa123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppassword" ]
+      interval: 5s
+      retries: 5
+    networks:
+      - ambiente-network
+  hyperativa-api:
+    container_name: hyperativa-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hyperativa-api:latest
+    environment:
+      PORT: 8080
+      MYSQL_DB_HOST: db
+      MYSQL_DB_PORT: 3306
+      MYSQL_DB_NAME: hyperativa_db
+      MYSQL_DB_USER_NAME: hyperativa
+      MYSQL_DB_USER_PASSWORD: hyperativa123
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ambiente-network
+
+volumes:
+  mysql_data:
+
+networks:
+  ambiente-network:
+    driver: bridge
