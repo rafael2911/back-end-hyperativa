@@ -91,8 +91,6 @@ public class CardService {
 
             int successCount = 0;
 
-            List<CardEntity> all = cardEntityRepository.findAll();
-
             for (CardRequestDTO cardRequest : cards) {
                 successCount = createCard(loteNumber, cardRequest, userEntity, successCount);
             }

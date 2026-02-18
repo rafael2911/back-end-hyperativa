@@ -4,8 +4,13 @@ import com.hyperativa.api.dto.BatchUploadResponseDTO;
 import com.hyperativa.api.dto.CardRequestDTO;
 import com.hyperativa.api.dto.CardResponseDTO;
 import com.hyperativa.api.service.CardService;
-import com.hyperativa.api.service.FileParserService;
 import com.hyperativa.api.util.CardNumberUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,12 +28,20 @@ import java.net.URI;
 @RestController
 @RequestMapping("/v1/cards")
 @AllArgsConstructor
+@Tag(name = "Cards", description = "Card management endpoints - create, search, and batch upload")
 public class CardController {
 
     private final CardService cardService;
-    private final FileParserService fileParserService;
 
     @PostMapping
+    @Operation(summary = "Create a new card", description = "Register a single credit card for the authenticated user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Card successfully created",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CardResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "403", description = "Unauthorized access"),
+            @ApiResponse(responseCode = "409", description = "Card already exists")
+    })
     public ResponseEntity<CardResponseDTO> createCard(
             @Valid @RequestBody CardRequestDTO request,
             UriComponentsBuilder uriBuilder,
@@ -50,6 +63,13 @@ public class CardController {
             value = "/batch",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
+    @Operation(summary = "Upload batch of cards", description = "Register multiple credit cards from a TXT file")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Batch processed successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BatchUploadResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid file or empty file"),
+            @ApiResponse(responseCode = "403", description = "Unauthorized access")
+    })
     public ResponseEntity<BatchUploadResponseDTO> uploadCardBatch(
             @RequestPart MultipartFile file,
             Authentication authentication,
@@ -68,6 +88,13 @@ public class CardController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get card by ID", description = "Retrieve card details by ID (only owner or admin can access)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Card found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CardResponseDTO.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized access - card belongs to another user"),
+            @ApiResponse(responseCode = "404", description = "Card not found")
+    })
     public ResponseEntity<CardResponseDTO> getCardById(
             @PathVariable Long id,
             Authentication authentication,
@@ -84,6 +111,13 @@ public class CardController {
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Search card by number", description = "Find a card by its full number (only owner can access)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Card found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = CardResponseDTO.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized access"),
+            @ApiResponse(responseCode = "404", description = "Card not found")
+    })
     public ResponseEntity<CardResponseDTO> searchCard(
             @RequestHeader String cardNumber,
             Authentication authentication,
