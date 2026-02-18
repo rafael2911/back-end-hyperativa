@@ -19,10 +19,15 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Hyperativa Card API")
-                        .description("API para cadastro e consulta de números de cartão - Desafio Hyperativa")
+                        .description("API for registration and querying of credit card numbers - Hyperativa Challenge")
                         .version("v1")
-                        .contact(new Contact().name("Hyperativa API Team").email("dev@hyperativa.com"))
-                        .license(new License().name("MIT").url("https://opensource.org/licenses/MIT"))
+                        .contact(new Contact()
+                                .name("Hyperativa API Team")
+                                .email("dev@hyperativa.com")
+                                .url("https://hyperativa.com"))
+                        .license(new License()
+                                .name("MIT License")
+                                .url("https://opensource.org/licenses/MIT"))
                 )
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
@@ -31,8 +36,10 @@ public class OpenApiConfig {
                                         .name("Authorization")
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
-                                        .bearerFormat("JWT")))
-                .externalDocs(new ExternalDocumentation().description("Project Docs").url("https://example.com/docs"));
+                                        .bearerFormat("JWT")
+                                        .description("JWT Bearer Token Authentication")))
+                .externalDocs(new ExternalDocumentation()
+                        .description("Hyperativa Card API Documentation")
+                        .url("https://github.com/hyperativa/card-api"));
     }
 }
-
