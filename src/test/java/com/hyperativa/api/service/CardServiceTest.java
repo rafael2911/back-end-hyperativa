@@ -10,7 +10,7 @@ import com.hyperativa.api.exception.UserNotAuthorizedException;
 import com.hyperativa.api.mapper.CardEntityMapper;
 import com.hyperativa.api.repository.CardEntityRepository;
 import com.hyperativa.api.repository.UserEntityRepository;
-import com.hyperativa.api.security.CryptoService;
+import com.hyperativa.api.security.CryptoServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,13 +35,13 @@ class CardServiceTest {
     private UserEntityRepository userEntityRepository;
 
     @Mock
-    private CryptoService cryptoService;
+    private CryptoServiceImpl cryptoService;
 
     @Mock
     private CardEntityMapper cardEntityMapper;
 
     @InjectMocks
-    private CardService cardService;
+    private CardServiceImpl cardService;
 
     @Test
     void testCreateCardSuccess() {

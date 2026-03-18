@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class FileParserServiceTest {
 
     @InjectMocks
-    private FileParserService fileParserService;
+    private FileParserServiceImpl fileParserService;
 
     @Test
     void testParseValidCardFile() {

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CryptoServiceTest {
 
     @InjectMocks
-    private CryptoService cryptoService;
+    private CryptoServiceImpl cryptoService;
 
     @BeforeEach
     void setUp() {
@@ -68,7 +68,7 @@ class CryptoServiceTest {
         String encryptedDefault = cryptoService.encrypt(original);
 
         // change secret key via reflection and encrypt again
-        CryptoService another = new CryptoService();
+        CryptoServiceImpl another = new CryptoServiceImpl();
         ReflectionTestUtils.setField(another, "secretKey", "another-secret-key-value");
         String encryptedWithAnother = another.encrypt(original);
 

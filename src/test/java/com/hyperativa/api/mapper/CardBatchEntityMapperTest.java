@@ -2,7 +2,7 @@ package com.hyperativa.api.mapper;
 
 import com.hyperativa.api.dto.CardRequestDTO;
 import com.hyperativa.api.entity.CardBatchEntity;
-import com.hyperativa.api.service.FileParserService;
+import com.hyperativa.api.service.FileParserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 class CardBatchEntityMapperTest {
 
     @Mock
-    private FileParserService fileParserService;
+    private FileParserServiceImpl fileParserService;
 
     private CardBatchEntityMapper cardBatchEntityMapper;
 

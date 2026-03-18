@@ -40,10 +40,10 @@ class CardServiceBatchTest {
     private CardEntityMapper cardEntityMapper;
 
     @Mock
-    private FileParserService fileParserService;
+    private FileParserServiceImpl fileParserService;
 
     @InjectMocks
-    private CardService cardService;
+    private CardServiceImpl cardService;
 
     private MultipartFile file;
 

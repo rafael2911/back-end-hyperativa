@@ -3,7 +3,7 @@ package com.hyperativa.api.mapper;
 import com.hyperativa.api.dto.CardRequestDTO;
 import com.hyperativa.api.dto.CardResponseDTO;
 import com.hyperativa.api.entity.CardEntity;
-import com.hyperativa.api.security.CryptoService;
+import com.hyperativa.api.security.CryptoServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 class CardEntityMapperTest {
 
     @Mock
-    private CryptoService cryptoService;
+    private CryptoServiceImpl cryptoService;
 
     private CardEntityMapper cardEntityMapper;
 
